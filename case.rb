@@ -45,6 +45,7 @@ class Case
         rtn << subgrid
       end
     end
+    rtn
   end
       
   

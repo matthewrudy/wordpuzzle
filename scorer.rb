@@ -30,7 +30,7 @@ class Scorer
     "Z" => 10
   }
   
-  def self.score(combo)
+  def self.word_score(combo)
     combo.inject(0) do |sum, letter|
       sum += LETTER_SCORES[letter]
     end

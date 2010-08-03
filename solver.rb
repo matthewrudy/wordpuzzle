@@ -32,5 +32,5 @@ base_case = Case.new(GRID)
 
 base_case.all_words.each do |combo|
   puts combo.inspect
-  puts "score #{ Scorer.score(combo) }"
+  puts "score #{ Scorer.word_score(combo) }"
 end
