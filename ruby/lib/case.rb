@@ -12,6 +12,12 @@ class Case
     [ 3, 7,11,15], # col 4
   ]
   
+  def initialize(grid)
+    @grid = grid
+  end
+  
+  attr_reader :grid
+  
   def all_combos
     COMBOS.inject([]) do |combos, indices|
       all_4 = grid.values_at(*indices)
@@ -28,12 +34,6 @@ class Case
       is_word?(combo)
     end
   end
-  
-  def initialize(grid)
-    @grid = grid
-  end
-  
-  attr_reader :grid
   
   def subcases
     rtn = []
