@@ -16,21 +16,30 @@ module Puzzler
       [ 3, 7,11,15], # col 4
     ]
   
-    def initialize(grid)
+    def initialize(grid, parent, generation)
       @grid = grid
+      @parent = parent
+      @generation = generation
     end
   
-    attr_reader :grid
+    attr_reader :grid, :parent, :generation
+    
+    def each_combo
+      COMBOS.each do |combo|
+        [combo, combo[0,3], combo[1,3]].each do |subcombo|
+          yield subcombo
+          yield subcombo.reverse
+        end
+      end
+      nil
+    end
   
     def all_combos
-      COMBOS.inject([]) do |combos, indices|
-        all_4 = grid.values_at(*indices)
-        combos << all_4
-        combos << all_4[0,3]
-        combos << all_4[1,3]
-
-        combos
+      rtn = []
+      each_combo do |combo|
+        rtn << combo
       end
+      rtn
     end
   
     def all_words

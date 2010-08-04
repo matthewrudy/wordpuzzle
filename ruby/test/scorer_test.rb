@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class PuzzlerTest < Test::Unit::TestCase
+class ScorerTest < Test::Unit::TestCase
   
    # B A R B
    # F A J E
