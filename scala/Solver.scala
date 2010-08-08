@@ -34,7 +34,8 @@ object Scorer {
 		"JAR",
 		"BEAN",
 		"BARB",
-		"BAR"
+		"BAR",
+		"AAJR"
 	)
 
 }
@@ -45,7 +46,10 @@ println("score for Y is " + Scorer.LETTER_SCORES("Y"))
 class Word(val letters : List[String]) {
 	
 	def score() : Int = {
-		letters.foldLeft(0)((sum, letter) => sum + Scorer.LETTER_SCORES(letter))
+		if(isWord) {
+		  letters.foldLeft(0)((sum, letter) => sum + Scorer.LETTER_SCORES(letter))
+		}
+		else 0
     }
 
     def isWord() = {
@@ -83,8 +87,20 @@ class Grid(val rowList : List[List[String]]) {
 		rowList.foreach {
 			row => row
 			
-			val word = new Word(row)
-			sum = sum + word.score()
+			val word4 = new Word(row)
+			sum = sum + word4.score()
+			
+			val word4rev = new Word(row.reverse)
+			sum = sum + word4rev.score()
+		}
+		colList.foreach {
+			col => col
+			
+			val word4 = new Word(col)
+			sum = sum + word4.score()
+			
+			val word4rev = new Word(col.reverse)
+			sum = sum + word4rev.score()
 		}
 		return sum
 	}
