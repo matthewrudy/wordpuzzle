@@ -132,3 +132,12 @@ val grid = Grid(
 	println("grid row 1 is " + grid.rowList(0))
 	println("grid col 1 is " + grid.colList(0))
 	println("grid score is " + grid.score)
+	
+class Move(val generation : Int, val grid : Grid, val parent : Move) {
+}
+
+val base = new Move(0, grid, null)
+val second = new Move(1, grid, base)
+
+println("base's parent is " + base.parent)
+println("second's parent is " + second.parent)
