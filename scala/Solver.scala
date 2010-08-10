@@ -30,7 +30,8 @@ object Scorer {
 		"Z" -> 10
 	)
 	
-	val WORDS = io.Source.fromFile("3letters.dictionary").getLines.toList ::: io.Source.fromFile("4letters.dictionary").getLines.toList
+	val WORDS = io.Source.fromFile("3letters.dictionary").getLines.toList :::
+	            io.Source.fromFile("4letters.dictionary").getLines.toList
 	
 }
 
