@@ -34,7 +34,7 @@ object Scorer {
 
 }
 
-println(Scorer.WORDS)
+println(Scorer.WORDS.head + "..." + Scorer.WORDS.last)
 println("score for Y is " + Scorer.LETTER_SCORES("Y"))
 
 class Word(val letters : List[String]) {
