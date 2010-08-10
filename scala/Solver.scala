@@ -41,7 +41,8 @@ class Word(val letters : List[String]) {
 	
 	def score() : Int = {
 		if(isWord) {
-		  letters.foldLeft(0)((sum, letter) => sum + Scorer.LETTER_SCORES(letter))
+		  val scrabbleScore = letters.foldLeft(0)((sum, letter) => sum + Scorer.LETTER_SCORES(letter))
+		  scrabbleScore * letters.length
 		}
 		else 0
     }
@@ -64,13 +65,16 @@ object Word {
 		
 
 val jar = Word("J", "A", "R")
-
 println("word is " + jar.toString())
 println("score is " + jar.score())
 println("jar is a word? : " + jar.isWord())
 
+val jars = Word("J", "A", "R", "S")
+println("score for jars is " + jars.score())
+
 val gar = Word("G", "A", "R")
 println("gar is a word? : " + gar.isWord())
+println("score for gars is " + gar.score())
 
 class Grid(val rowList : List[List[String]]) {
 	
