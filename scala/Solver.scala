@@ -88,13 +88,19 @@ class Grid(val rowList : List[List[String]]) {
 
 	def score() = {
 		var sum = 0
-		val addWordScores = { letters:List[String] =>
+		
+		val addWordScores = { letterList:List[String] =>
 			
-			val word4  = new Word(letters)
-			val word3a = new Word(letters.slice(0,3))
-			val word3b = new Word(letters.slice(1,4))
+			val combos = List( (0,4), (0,3), (1,4) )
 			
-			sum = sum + word4.score() + word3a.score() + word3b.score()
+			combos.foreach { o =>
+				val letters = letterList.slice( o._1, o._2 )
+				val word = new Word(letters)
+				
+				if(word.isWord) {
+					sum = sum + word.score()
+				}
+			}
 		}
 		rowList.foreach { addWordScores }
 		colList.foreach { addWordScores }
