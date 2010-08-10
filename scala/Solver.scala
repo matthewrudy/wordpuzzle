@@ -29,15 +29,9 @@ object Scorer {
 		"Y" -> 4,
 		"Z" -> 10
 	)
-
-	val WORDS = List(
-		"JAR",
-		"BEAN",
-		"BARB",
-		"BAR",
-		"AAJR"
-	)
-
+	
+	val WORDS = io.Source.fromFile("3letters.dictionary").getLines.toList ::: io.Source.fromFile("4letters.dictionary").getLines.toList
+	
 }
 
 println(Scorer.WORDS)
