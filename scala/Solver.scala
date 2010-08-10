@@ -86,10 +86,9 @@ class Grid(val rowList : List[List[String]]) {
 
 	val colList = rowList.transpose
 
-	def score() : Int = {
+	def score() = {
 		var sum = 0
-		val addWordScores = {
-			line => val letters;
+		val addWordScores = { letters:List[String] =>
 			
 			val word4  = new Word(letters)
 			val word3a = new Word(letters.slice(0,3))
