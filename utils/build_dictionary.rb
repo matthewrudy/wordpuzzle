@@ -1,6 +1,6 @@
 # use:
 #
-#  ruby utils/building_dictionary.rb http://scrabutility.com/3_SOWPODS.php > 3letters.dictionary
+#  ruby utils/build_dictionary.rb http://scrabutility.com/3_SOWPODS.php > 3letters.dictionary
 require 'rubygems'
 require 'open-uri'
 require 'hpricot'
