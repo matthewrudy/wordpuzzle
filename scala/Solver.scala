@@ -66,7 +66,7 @@ object Word {
   assert(Word.isWord("JAD") == false, "JAD is not a word")
 }
 
-class Grid(val letters : List[String]) {
+class Grid(val letters : List[String], val wordBucket : WordBucket) {
 
   def calculateScore() = {
     possibleWords.foldLeft(0) { (sum, p) =>
@@ -77,6 +77,15 @@ class Grid(val letters : List[String]) {
         sum + Word.score(word)
       else
         sum
+    }
+  }
+  
+  def validWords() = {
+    possibleWords.filter { p =>
+      val position = p._1
+      val word     = p._2
+      
+      Word.isWord(word) && wordBucket.valid(position, word)
     }
   }
   
@@ -91,6 +100,10 @@ class Grid(val letters : List[String]) {
   }
 
   val score = this.calculateScore()
+  
+  def nextMove() = {
+    new Grid(letters, wordBucket.merge(validWords))
+  }
 }
 
 object WordBucket {
@@ -180,7 +193,7 @@ object Grid {
   )
 
   def apply(letters:String*) = {
-    new Grid(letters.toList)
+    new Grid(letters.toList, WordBucket())
   }
 }
 
@@ -190,6 +203,12 @@ val grid = Grid(
   "H", "A", "A", "A",
   "G", "N", "R", "A"
 )
+
+println(grid.validWords)
+
+val grid2 = grid.nextMove()
+
+println(grid2.validWords)
 
 { // stick the assertions in a block so i can code fold them
   
