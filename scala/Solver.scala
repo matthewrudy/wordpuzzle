@@ -53,16 +53,18 @@ object Word {
 
 }
 
-assert(Word.isWord("AAH"),  "AAH is a word")
-assert(Word.isWord("ZYME"), "ZYME is a word")
+{ // stick the asserts in a block so i can code fold them
+  assert(Word.isWord("AAH"),  "AAH is a word")
+  assert(Word.isWord("ZYME"), "ZYME is a word")
 
-assert(Word.score("JAR")  == 30, "JAR's score is 30")
-assert(Word.score("JARS") == 44, "JARS' score is 44")
+  assert(Word.score("JAR")  == 30, "JAR's score is 30")
+  assert(Word.score("JARS") == 44, "JARS' score is 44")
 
-assert(Word.isWord("JAR"),  "JAR is a word")
-assert(Word.isWord("JARS"), "JARS is a word")
+  assert(Word.isWord("JAR"),  "JAR is a word")
+  assert(Word.isWord("JARS"), "JARS is a word")
 
-assert(Word.isWord("JAD") == false, "JAD is not a word")
+  assert(Word.isWord("JAD") == false, "JAD is not a word")
+}
 
 class Grid(val rowList : List[List[String]]) {
 
@@ -125,60 +127,58 @@ object Grid {
     "col4-4"  -> ( 3, 7,11,15),
     "col4-3a" -> ( 3, 7,11   ),
     "col4-3b" -> (    7,11,15)
-    )
+  )
 
+  def apply(letters:String*) = {
+    val list = letters.toList
 
-    def apply(letters:String*) = {
-      val list = letters.toList
+    val row1 = list.slice( 0, 4)
+    val row2 = list.slice( 4, 8)
+    val row3 = list.slice( 8,12)
+    val row4 = list.slice(12,16)
 
-      val row1 = list.slice( 0, 4)
-      val row2 = list.slice( 4, 8)
-      val row3 = list.slice( 8,12)
-      val row4 = list.slice(12,16)
+    new Grid( List(row1, row2, row3, row4) )
+  }
+}
 
-      new Grid( List(row1, row2, row3, row4) )
-    }
+val grid = Grid(
+  "B", "A", "R", "B",
+  "F", "A", "J", "E",
+  "H", "A", "A", "A",
+  "G", "N", "R", "A"
+)
+
+{ // stick the assertions in a block so i can code fold them
+  assert(grid.rowList(0) == List("B", "A", "R", "B"))
+  assert(grid.colList(2) == List("R", "J", "A", "R"))
+
+  assert(Word.score("BAR") == 15,      "BAR is 15")
+  assert(Word.score("BARB") == 32, "BARB is 32")
+  assert(Word.score("ARB") == 15,      "ARB is 15")
+  assert(Word.score("JAR") == 30,      "JAR is 30")
+
+  assert(grid.score == 92, "grid's score is BAR + BARB + ARB + JAR = 92")
+}
+
+class Move(val generation : Int, val grid : Grid, val parent : Move) {
+
+  def parentScore() : Int = {
+    if(this.parent != null) parent.score else 0
   }
 
-  val grid = Grid(
-    "B", "A", "R", "B",
-    "F", "A", "J", "E",
-    "H", "A", "A", "A",
-    "G", "N", "R", "A")
+  val score = parentScore() + grid.score
 
-    assert(grid.rowList(0) == List("B", "A", "R", "B"))
-    assert(grid.colList(2) == List("R", "J", "A", "R"))
-
-    assert(Word.score("BAR") == 15,      "BAR is 15")
-    assert(Word.score("BARB") == 32, "BARB is 32")
-    assert(Word.score("ARB") == 15,      "ARB is 15")
-    assert(Word.score("JAR") == 30,      "JAR is 30")
-
-    assert(grid.score == 92, "grid's score is BAR + BARB + ARB + JAR = 92")
-
-    class Move(val generation : Int, val grid : Grid, val parent : Move) {
-
-      def parentScore() : Int = {
-        if(this.parent != null) {
-          parent.score
-        }
-        else 0
-      }
-
-      val score = parentScore() + grid.score
-
-      def nextMoves(generations:Int) {
-        if(generations > 0) {
-          (1 to 120).foreach { i =>
-            val nextone = new Move(this.generation+1, grid, this)
-            nextone.nextMoves(generations - 1)
-          }
-        }
-        else this.score
+  def nextMoves(generations:Int) {
+    if(generations > 0) {
+      (1 to 120).foreach { i =>
+        val nextone = new Move(this.generation+1, grid, this)
+        nextone.nextMoves(generations - 1)
       }
     }
+  }
+}
 
-    val base = new Move(0, grid, null)
-    val second = new Move(1, grid, base)
+val base = new Move(0, grid, null)
+val second = new Move(1, grid, base)
 
-    //base.nextMoves(5)
+//base.nextMoves(5)
