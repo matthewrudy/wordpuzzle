@@ -77,30 +77,23 @@ class Grid(val letters : List[String]) {
   val colList = rowList.transpose
 
   def calculateScore() = {
-    var sum = 0
-
-    val addWordScores = { letterList:List[String] =>
-
-      val combos = List( (0,4), (0,3), (1,4) )
-
-      combos.foreach { o =>
-        val word = letterList.slice( o._1, o._2 ).mkString("")
-        
-        if(Word.isWord(word)) {
-          sum = sum + Word.score(word)
-        }
-      }
+    possibleWords.foldLeft(0) { (sum, p) =>
+      val position = p._1
+      val word     = p._2
+      
+      if(Word.isWord(word))
+        sum + Word.score(word)
+      else
+        sum
     }
-    rowList.foreach { addWordScores }
-    colList.foreach { addWordScores }
-    sum
   }
   
   def possibleWords = {
     Grid.POSITIONS.map { p =>
       val position = p._1
       val indices  = p._2
-      val word     = indices.map(index => letters(index))
+      val word     = indices.map(index => letters(index)).mkString("")
+      
       position -> word
     }
   }
@@ -156,12 +149,8 @@ val grid = Grid(
   "G", "N", "R", "A"
 )
 
-println(grid.possibleWords)
-
 { // stick the assertions in a block so i can code fold them
-  assert(grid.rowList(0) == List("B", "A", "R", "B"))
-  assert(grid.colList(2) == List("R", "J", "A", "R"))
-
+  
   assert(Word.score("BAR") == 15,      "BAR is 15")
   assert(Word.score("BARB") == 32, "BARB is 32")
   assert(Word.score("ARB") == 15,      "ARB is 15")
