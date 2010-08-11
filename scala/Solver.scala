@@ -66,12 +66,12 @@ object Word {
   assert(Word.isWord("JAD") == false, "JAD is not a word")
 }
 
-class Grid(val list : List[String]) {
+class Grid(val letters : List[String]) {
 
-  val row1 = list.slice( 0, 4)
-  val row2 = list.slice( 4, 8)
-  val row3 = list.slice( 8,12)
-  val row4 = list.slice(12,16)
+  val row1 = letters.slice( 0, 4)
+  val row2 = letters.slice( 4, 8)
+  val row3 = letters.slice( 8,12)
+  val row4 = letters.slice(12,16)
 
   val rowList = List(row1, row2, row3, row4)
   val colList = rowList.transpose
@@ -95,6 +95,15 @@ class Grid(val list : List[String]) {
     colList.foreach { addWordScores }
     sum
   }
+  
+  def possibleWords = {
+    Grid.POSITIONS.map { p =>
+      val position = p._1
+      val indices  = p._2
+      val word     = indices.map(index => letters(index))
+      position -> word
+    }
+  }
 
   val score = this.calculateScore()
 }
@@ -102,37 +111,37 @@ class Grid(val list : List[String]) {
 object Grid {
 
   val POSITIONS = Map(
-    "row1-4"  -> ( 0, 1, 2, 3),
-    "row1-3a" -> ( 0, 1, 2   ),
-    "row1-3b" -> (    1, 2, 3),
+    "row1-4"  -> List( 0, 1, 2, 3),
+    "row1-3a" -> List( 0, 1, 2   ),
+    "row1-3b" -> List(    1, 2, 3),
 
-    "row2-4"  -> ( 4, 5, 6, 7),
-    "row2-3a" -> ( 4, 5, 6   ),
-    "row2-3b" -> (    5, 6, 7),
+    "row2-4"  -> List( 4, 5, 6, 7),
+    "row2-3a" -> List( 4, 5, 6   ),
+    "row2-3b" -> List(    5, 6, 7),
 
-    "row3-4"  -> ( 8, 9,10,11),
-    "row3-3a" -> ( 8, 9,10   ),
-    "row3-3b" -> (    9,10,11),
+    "row3-4"  -> List( 8, 9,10,11),
+    "row3-3a" -> List( 8, 9,10   ),
+    "row3-3b" -> List(    9,10,11),
 
-    "row4-4"  -> (12,13,14,15),
-    "row4-3a" -> (12,13,14   ),
-    "row4-3b" -> (   13,14,15),
+    "row4-4"  -> List(12,13,14,15),
+    "row4-3a" -> List(12,13,14   ),
+    "row4-3b" -> List(   13,14,15),
 
-    "col1-4"  -> ( 0, 4, 8,12),
-    "col1-3a" -> ( 0, 4, 8   ),
-    "col1-3b" -> (    4, 8,12),
+    "col1-4"  -> List( 0, 4, 8,12),
+    "col1-3a" -> List( 0, 4, 8   ),
+    "col1-3b" -> List(    4, 8,12),
 
-    "col2-4"  -> ( 1, 5, 9,13),
-    "col2-3a" -> ( 1, 5, 9   ),
-    "col2-3b" -> (    5, 9,13),
+    "col2-4"  -> List( 1, 5, 9,13),
+    "col2-3a" -> List( 1, 5, 9   ),
+    "col2-3b" -> List(    5, 9,13),
 
-    "col3-4"  -> ( 2, 6,10,14),
-    "col3-3a" -> ( 2, 6,10   ),
-    "col3-3b" -> (    6,10,14),
+    "col3-4"  -> List( 2, 6,10,14),
+    "col3-3a" -> List( 2, 6,10   ),
+    "col3-3b" -> List(    6,10,14),
 
-    "col4-4"  -> ( 3, 7,11,15),
-    "col4-3a" -> ( 3, 7,11   ),
-    "col4-3b" -> (    7,11,15)
+    "col4-4"  -> List( 3, 7,11,15),
+    "col4-3a" -> List( 3, 7,11   ),
+    "col4-3b" -> List(    7,11,15)
   )
 
   def apply(letters:String*) = {
@@ -146,6 +155,8 @@ val grid = Grid(
   "H", "A", "A", "A",
   "G", "N", "R", "A"
 )
+
+println(grid.possibleWords)
 
 { // stick the assertions in a block so i can code fold them
   assert(grid.rowList(0) == List("B", "A", "R", "B"))
