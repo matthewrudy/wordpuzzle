@@ -121,7 +121,7 @@ class WordBucket(val bucket:Map[String, Set[String]]) {
   
   // have we hit this before in this position
   def valid(position:String, word:String) = {
-      !(bucket(position) contains word)
+    !(bucket(position) contains word)
   }
   
   // at the next move
