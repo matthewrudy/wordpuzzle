@@ -125,16 +125,17 @@ val grid = Grid(
 	"B", "A", "R", "B",
 	"F", "A", "J", "E",
 	"H", "A", "A", "A",
-	"G", "N", "A", "A")
+	"G", "N", "R", "A")
 
 assert(grid.rowList(0) == List("B", "A", "R", "B"))
-assert(grid.colList(2) == List("R", "J", "A", "A"))
+assert(grid.colList(2) == List("R", "J", "A", "R"))
 
 assert(Word("B", "A", "R").score == 15,      "BAR is 15")
 assert(Word("B", "A", "R", "B").score == 32, "BARB is 32")
 assert(Word("A", "R", "B").score == 15,      "ARB is 15")
+assert(Word("J", "A", "R").score == 30,      "JAR is 30")
 
-assert(grid.score == 62, "grid's score is BAR + BARB + ARB = 62")
+assert(grid.score == 92, "grid's score is BAR + BARB + ARB + JAR = 92")
 	
 class Move(val generation : Int, val grid : Grid, val parent : Move) {
 	
