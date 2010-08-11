@@ -39,6 +39,8 @@ println("score for Y is " + Scorer.LETTER_SCORES("Y"))
 
 class Word(val letters : List[String]) {
 
+    val isWord = Scorer.WORDS contains this.toString
+
     // JAR :
     // J = 8
     // A = 1
@@ -46,15 +48,8 @@ class Word(val letters : List[String]) {
     // scrabble score = 8 + 1 + 1 = 10
     // actual score = 3 * 10 = 30
 	def score() : Int = {
-		if(isWord) {
-			val scrabbleScore = letters.foldLeft(0)((sum, letter) => sum + Scorer.LETTER_SCORES(letter))
-			scrabbleScore * letters.length
-		}
-		else 0
-	}
-
-	def isWord() = {
-		Scorer.WORDS contains this.toString
+		val scrabbleScore = letters.foldLeft(0)((sum, letter) => sum + Scorer.LETTER_SCORES(letter))
+		scrabbleScore * letters.length
 	}
 
 	override def toString() = letters.mkString("")
@@ -73,20 +68,20 @@ object Word {
 val jar = Word("J", "A", "R")
 println("word is " + jar.toString())
 println("score is " + jar.score())
-println("jar is a word? : " + jar.isWord())
+println("jar is a word? : " + jar.isWord)
 
 val jars = Word("J", "A", "R", "S")
 println("score for jars is " + jars.score())
 
 val gar = Word("G", "A", "R")
-println("gar is a word? : " + gar.isWord())
+println("gar is a word? : " + gar.isWord)
 println("score for gars is " + gar.score())
 
 class Grid(val rowList : List[List[String]]) {
 
 	val colList = rowList.transpose
-
-	def score() = {
+	
+	def calculateScore() = {
 		var sum = 0
 		
 		val addWordScores = { letterList:List[String] =>
@@ -106,6 +101,8 @@ class Grid(val rowList : List[List[String]]) {
 		colList.foreach { addWordScores }
 		sum
 	}
+	
+	val score = this.calculateScore()
 }
 
 object Grid {
@@ -126,18 +123,38 @@ val grid = Grid(
 	"B", "A", "R", "B",
 	"F", "A", "J", "E",
 	"H", "A", "A", "A",
-	"G", "N", "A", "A"
-	)
+	"G", "N", "A", "A")
 
-	println("grid row 1 is " + grid.rowList(0))
-	println("grid col 1 is " + grid.colList(0))
-	println("grid score is " + grid.score)
+println("grid row 1 is " + grid.rowList(0))
+println("grid col 1 is " + grid.colList(0))
+println("grid score is " + grid.score)
 	
 class Move(val generation : Int, val grid : Grid, val parent : Move) {
+	
+	def parentScore() : Int = {
+		if(this.parent != null) {
+			parent.score
+		}
+		else 0
+	}
+	
+	val score = parentScore() + grid.score
+			
+	def nextMoves(generations:Int) {
+		if(generations > 0) {
+			(1 to 120).foreach { i =>
+				val nextone = new Move(this.generation+1, grid, this)
+				nextone.nextMoves(generations - 1)
+			}
+		}
+		else this.score
+	}
 }
 
 val base = new Move(0, grid, null)
 val second = new Move(1, grid, base)
 
-println("base's parent is " + base.parent)
-println("second's parent is " + second.parent)
+println("base's parent is " + base.parent + " score: " + base.score)
+println("second's parent is " + second.parent + " score:" + second.score)
+
+//base.nextMoves(5)
