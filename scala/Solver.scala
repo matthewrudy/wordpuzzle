@@ -93,6 +93,56 @@ class Grid(val letters : List[String]) {
   val score = this.calculateScore()
 }
 
+object WordBucket {
+  
+  val EMPTY_BUCKET = Grid.POSITIONS.map { p =>
+    val position = p._1
+    val indices  = p._2
+    
+    position -> Set[String]()
+  }
+   
+  def apply() = {
+    new WordBucket(EMPTY_BUCKET)
+  }
+}
+
+class WordBucket(val bucket:Map[String, Set[String]]) {
+  
+  // have we hit this before in this position
+  def valid(position:String, word:String) = {
+      !(bucket(position) contains word)
+  }
+  
+  // at the next move
+  def merge(newWords:Map[String, String]) = {
+    val newBucket = bucket.map { p => 
+      val position = p._1
+      var words    = p._2
+      val newWord  = newWords.get(position).orNull
+      
+      if(newWord != null)
+        words = words + newWord
+      
+      position -> words
+    }
+    new WordBucket(newBucket)
+  }
+      
+}
+
+val bucket = WordBucket()
+println("is poo valid at 'col1-4'? " + bucket.valid("col1-4", "POO"))
+println("is poo valid at 'row1-4'? " + bucket.valid("row1-4", "POO"))
+println("is guff valid at 'col1-4'? " + bucket.valid("col1-4", "GUFF"))
+
+val newWords = Map("col1-4" -> "POO", "row1-4" -> "WEE")
+val newbie = bucket.merge(newWords)
+
+println("is poo valid at 'col1-4'? " + newbie.valid("col1-4", "POO"))
+println("is poo valid at 'row1-4'? " + newbie.valid("row1-4", "POO"))
+println("is guff valid at 'col1-4'? " + newbie.valid("col1-4", "GUFF"))
+
 object Grid {
 
   val POSITIONS = Map(
