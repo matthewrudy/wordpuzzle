@@ -30,7 +30,7 @@ object Scorer {
 		"Z" -> 10)
 
 	val WORDS = io.Source.fromFile("3letters.dictionary").getLines.toList :::
-	io.Source.fromFile("4letters.dictionary").getLines.toList
+	            io.Source.fromFile("4letters.dictionary").getLines.toList
 
 }
 
@@ -108,6 +108,41 @@ class Grid(val rowList : List[List[String]]) {
 }
 
 object Grid {
+	
+	val POSITIONS = Map(
+		"row1-4"  -> ( 0, 1, 2, 3),
+		"row1-3a" -> ( 0, 1, 2   ),
+		"row1-3b" -> (    1, 2, 3),
+		
+		"row2-4"  -> ( 4, 5, 6, 7),
+		"row2-3a" -> ( 4, 5, 6   ),
+		"row2-3b" -> (    5, 6, 7),
+		
+		"row3-4"  -> ( 8, 9,10,11),
+		"row3-3a" -> ( 8, 9,10   ),
+		"row3-3b" -> (    9,10,11),
+		
+		"row4-4"  -> (12,13,14,15),
+		"row4-3a" -> (12,13,14   ),
+		"row4-3b" -> (   13,14,15),
+		
+		"col1-4"  -> ( 0, 4, 8,12),
+		"col1-3a" -> ( 0, 4, 8   ),
+		"col1-3b" -> (    4, 8,12),
+		
+		"col2-4"  -> ( 1, 5, 9,13),
+		"col2-3a" -> ( 1, 5, 9   ),
+		"col2-3b" -> (    5, 9,13),
+		
+		"col3-4"  -> ( 2, 6,10,14),
+		"col3-3a" -> ( 2, 6,10   ),
+		"col3-3b" -> (    6,10,14),
+		
+		"col4-4"  -> ( 3, 7,11,15),
+		"col4-3a" -> ( 3, 7,11   ),
+		"col4-3b" -> (    7,11,15)
+	)
+		
 
 	def apply(letters:String*) = {
 		val list = letters.toList
@@ -161,6 +196,5 @@ class Move(val generation : Int, val grid : Grid, val parent : Move) {
 
 val base = new Move(0, grid, null)
 val second = new Move(1, grid, base)
-
 
 //base.nextMoves(5)
