@@ -69,14 +69,11 @@ object Word {
 class Grid(val letters : List[String], val wordBucket : WordBucket) {
 
   def calculateScore() = {
-    possibleWords.foldLeft(0) { (sum, p) =>
+    validWords.foldLeft(0) { (sum, p) =>
       val position = p._1
       val word     = p._2
       
-      if(Word.isWord(word))
-        sum + Word.score(word)
-      else
-        sum
+      sum + Word.score(word)
     }
   }
   
