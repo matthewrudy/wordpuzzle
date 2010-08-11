@@ -68,14 +68,6 @@ object Word {
 
 class Grid(val letters : List[String]) {
 
-  val row1 = letters.slice( 0, 4)
-  val row2 = letters.slice( 4, 8)
-  val row3 = letters.slice( 8,12)
-  val row4 = letters.slice(12,16)
-
-  val rowList = List(row1, row2, row3, row4)
-  val colList = rowList.transpose
-
   def calculateScore() = {
     possibleWords.foldLeft(0) { (sum, p) =>
       val position = p._1
