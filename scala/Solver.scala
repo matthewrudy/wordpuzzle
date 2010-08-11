@@ -112,11 +112,10 @@ class Grid(val rowList : List[List[String]]) {
       val combos = List( (0,4), (0,3), (1,4) )
 
       combos.foreach { o =>
-        val letters = letterList.slice( o._1, o._2 )
-        val word = new Word(letters)
-
-        if(word.isWord) {
-          sum = sum + word.score()
+        val word = letterList.slice( o._1, o._2 ).mkString("")
+        
+        if(Word.isWord(word)) {
+          sum = sum + Word.score(word)
         }
       }
     }
