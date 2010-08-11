@@ -119,10 +119,10 @@ class WordBucket(val bucket:Map[String, Set[String]]) {
     val newBucket = bucket.map { p => 
       val position = p._1
       var words    = p._2
-      val newWord  = newWords.get(position).orNull
       
-      if(newWord != null)
-        words = words + newWord
+      if(newWords.isDefinedAt(position)) {
+        words = words + newWords(position)
+      }
       
       position -> words
     }
