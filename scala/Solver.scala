@@ -34,8 +34,11 @@ object Scorer {
 
 }
 
-println(Scorer.WORDS.head + "..." + Scorer.WORDS.last)
-println("score for Y is " + Scorer.LETTER_SCORES("Y"))
+assert(Scorer.WORDS.head == "AAH", "first word should be AAH")
+assert(Scorer.WORDS.last == "ZYME", "last word should be ZYME")
+
+assert(Scorer.LETTER_SCORES("A") == 1, "A has score 1")
+assert(Scorer.LETTER_SCORES("Y") == 4, "Y has score 4")
 
 class Word(val letters : List[String]) {
 
@@ -65,17 +68,16 @@ object Word {
 }
 
 val jar = Word("J", "A", "R")
-assert(jar.isWord)
-assert(jar.score() == 30)
-assert(jar.toString == "JAR")
+assert(jar.isWord, "JAR is a word")
+assert(jar.score() == 30, "JAR's score is 30'")
+assert(jar.toString == "JAR", "JAR should render as JAR")
 
 val jars = Word("J", "A", "R", "S")
-assert(jars.isWord)
-assert(jars.score() == 44)
+assert(jars.isWord, "JARS is a word")
+assert(jars.score() == 44, "JARS' score is 44")
 
-val gar = Word("G", "A", "R")
-//assert(!gar.isWord)
-println("score for gars is " + gar.score())
+val jad = Word("J", "A", "D")
+assert(jad.isWord == false, "JAD is not a word")
 
 class Grid(val rowList : List[List[String]]) {
 
@@ -128,7 +130,11 @@ val grid = Grid(
 assert(grid.rowList(0) == List("B", "A", "R", "B"))
 assert(grid.colList(2) == List("R", "J", "A", "A"))
 
-println("grid score is " + grid.score)
+assert(Word("B", "A", "R").score == 15,      "BAR is 15")
+assert(Word("B", "A", "R", "B").score == 32, "BARB is 32")
+assert(Word("A", "R", "B").score == 15,      "ARB is 15")
+
+assert(grid.score == 62, "grid's score is BAR + BARB + ARB = 62")
 	
 class Move(val generation : Int, val grid : Grid, val parent : Move) {
 	
@@ -155,7 +161,5 @@ class Move(val generation : Int, val grid : Grid, val parent : Move) {
 val base = new Move(0, grid, null)
 val second = new Move(1, grid, base)
 
-println("base's parent is " + base.parent + " score: " + base.score)
-println("second's parent is " + second.parent + " score:" + second.score)
 
 //base.nextMoves(5)
