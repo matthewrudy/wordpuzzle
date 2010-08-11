@@ -216,26 +216,3 @@ println(grid2.validWords)
 
   assert(grid.score == 92, "grid's score is BAR + BARB + ARB + JAR = 92")
 }
-
-class Move(val generation : Int, val grid : Grid, val parent : Move) {
-
-  def parentScore() : Int = {
-    if(this.parent != null) parent.score else 0
-  }
-
-  val score = parentScore() + grid.score
-
-  def nextMoves(generations:Int) {
-    if(generations > 0) {
-      (1 to 120).foreach { i =>
-        val nextone = new Move(this.generation+1, grid, this)
-        nextone.nextMoves(generations - 1)
-      }
-    }
-  }
-}
-
-val base = new Move(0, grid, null)
-val second = new Move(1, grid, base)
-
-//base.nextMoves(5)
