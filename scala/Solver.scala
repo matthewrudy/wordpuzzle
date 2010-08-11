@@ -43,30 +43,7 @@ assert(Scorer.WORDS.last == "ZYME", "last word should be ZYME")
 assert(Scorer.LETTER_SCORES("A") == 1, "A has score 1")
 assert(Scorer.LETTER_SCORES("Y") == 4, "Y has score 4")
 
-class Word(val letters : List[String]) {
-
-  val isWord = Scorer.WORDS contains this.toString
-
-  // JAR :
-  // J = 8
-  // A = 1
-  // R = 1
-  // scrabble score = 8 + 1 + 1 = 10
-  // actual score = 3 * 10 = 30
-  def score() : Int = {
-    val scrabbleScore = letters.foldLeft(0)((sum, letter) => sum + Scorer.LETTER_SCORES(letter))
-    scrabbleScore * letters.length
-  }
-
-  override def toString() = letters.mkString("")
-
-}
-
 object Word {
-
-  def apply(letters : String*) = {
-    new Word(letters.toList)
-  }
   
   def scrabbleScore(word:String) = {
     word.foldLeft(0) {
@@ -74,16 +51,17 @@ object Word {
     }
   }
   
+  // JAR :
+  // J = 8
+  // A = 1
+  // R = 1
+  // scrabble score = 8 + 1 + 1 = 10
+  // actual score = 3 * 10 = 30
   def score(word:String) = scrabbleScore(word) * word.length
   
   def isWord(word:String) = Scorer.WORDS contains word
 
 }
-
-val jar = Word("J", "A", "R")
-assert(jar.isWord, "JAR is a word")
-assert(jar.score() == 30, "JAR's score is 30'")
-assert(jar.toString == "JAR", "JAR should render as JAR")
 
 assert(Word.score("JAR")  == 30, "JAR's score is 30")
 assert(Word.score("JARS") == 44, "JARS' score is 44")
@@ -92,13 +70,6 @@ assert(Word.isWord("JAR"),  "JAR is a word")
 assert(Word.isWord("JARS"), "JARS is a word")
 
 assert(Word.isWord("JAD") == false, "JAD is not a word")
-
-val jars = Word("J", "A", "R", "S")
-assert(jars.isWord, "JARS is a word")
-assert(jars.score() == 44, "JARS' score is 44")
-
-val jad = Word("J", "A", "D")
-assert(jad.isWord == false, "JAD is not a word")
 
 class Grid(val rowList : List[List[String]]) {
 
@@ -185,10 +156,10 @@ object Grid {
     assert(grid.rowList(0) == List("B", "A", "R", "B"))
     assert(grid.colList(2) == List("R", "J", "A", "R"))
 
-    assert(Word("B", "A", "R").score == 15,      "BAR is 15")
-    assert(Word("B", "A", "R", "B").score == 32, "BARB is 32")
-    assert(Word("A", "R", "B").score == 15,      "ARB is 15")
-    assert(Word("J", "A", "R").score == 30,      "JAR is 30")
+    assert(Word.score("BAR") == 15,      "BAR is 15")
+    assert(Word.score("BARB") == 32, "BARB is 32")
+    assert(Word.score("ARB") == 15,      "ARB is 15")
+    assert(Word.score("JAR") == 30,      "JAR is 30")
 
     assert(grid.score == 92, "grid's score is BAR + BARB + ARB + JAR = 92")
 
