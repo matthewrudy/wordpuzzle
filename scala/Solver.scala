@@ -1,5 +1,11 @@
-object Scorer {
-
+object Word {
+  
+  def scrabbleScore(word:String) = {
+    word.foldLeft(0) {
+      (sum, letter) => sum + letterScore(letter)
+    }
+  }
+  
   /*scrabble scores*/
   val LETTER_SCORES = Map(
     "A" -> 1,
@@ -31,25 +37,6 @@ object Scorer {
   )
   
   def letterScore(character:Char) = LETTER_SCORES(character.toString)
-
-  val WORDS = io.Source.fromFile("3letters.dictionary").getLines.toList :::
-  io.Source.fromFile("4letters.dictionary").getLines.toList
-
-}
-
-assert(Scorer.WORDS.head == "AAH", "first word should be AAH")
-assert(Scorer.WORDS.last == "ZYME", "last word should be ZYME")
-
-assert(Scorer.LETTER_SCORES("A") == 1, "A has score 1")
-assert(Scorer.LETTER_SCORES("Y") == 4, "Y has score 4")
-
-object Word {
-  
-  def scrabbleScore(word:String) = {
-    word.foldLeft(0) {
-      (sum, letter) => sum + Scorer.letterScore(letter)
-    }
-  }
   
   // JAR :
   // J = 8
@@ -59,9 +46,15 @@ object Word {
   // actual score = 3 * 10 = 30
   def score(word:String) = scrabbleScore(word) * word.length
   
-  def isWord(word:String) = Scorer.WORDS contains word
+  val WORDS = io.Source.fromFile("3letters.dictionary").getLines.toList :::
+              io.Source.fromFile("4letters.dictionary").getLines.toList
+  
+  def isWord(word:String) = WORDS contains word
 
 }
+
+assert(Word.isWord("AAH"),  "AAH is a word")
+assert(Word.isWord("ZYME"), "ZYME is a word")
 
 assert(Word.score("JAR")  == 30, "JAR's score is 30")
 assert(Word.score("JARS") == 44, "JARS' score is 44")
