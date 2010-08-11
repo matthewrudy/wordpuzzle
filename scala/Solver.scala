@@ -64,17 +64,17 @@ object Word {
 
 }
 
-
 val jar = Word("J", "A", "R")
-println("word is " + jar.toString())
-println("score is " + jar.score())
-println("jar is a word? : " + jar.isWord)
+assert(jar.isWord)
+assert(jar.score() == 30)
+assert(jar.toString == "JAR")
 
 val jars = Word("J", "A", "R", "S")
-println("score for jars is " + jars.score())
+assert(jars.isWord)
+assert(jars.score() == 44)
 
 val gar = Word("G", "A", "R")
-println("gar is a word? : " + gar.isWord)
+//assert(!gar.isWord)
 println("score for gars is " + gar.score())
 
 class Grid(val rowList : List[List[String]]) {
@@ -125,8 +125,9 @@ val grid = Grid(
 	"H", "A", "A", "A",
 	"G", "N", "A", "A")
 
-println("grid row 1 is " + grid.rowList(0))
-println("grid col 1 is " + grid.colList(0))
+assert(grid.rowList(0) == List("B", "A", "R", "B"))
+assert(grid.colList(2) == List("R", "J", "A", "A"))
+
 println("grid score is " + grid.score)
 	
 class Move(val generation : Int, val grid : Grid, val parent : Move) {
