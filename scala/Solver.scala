@@ -66,8 +66,14 @@ object Word {
   assert(Word.isWord("JAD") == false, "JAD is not a word")
 }
 
-class Grid(val rowList : List[List[String]]) {
+class Grid(val list : List[String]) {
 
+  val row1 = list.slice( 0, 4)
+  val row2 = list.slice( 4, 8)
+  val row3 = list.slice( 8,12)
+  val row4 = list.slice(12,16)
+
+  val rowList = List(row1, row2, row3, row4)
   val colList = rowList.transpose
 
   def calculateScore() = {
@@ -130,14 +136,7 @@ object Grid {
   )
 
   def apply(letters:String*) = {
-    val list = letters.toList
-
-    val row1 = list.slice( 0, 4)
-    val row2 = list.slice( 4, 8)
-    val row3 = list.slice( 8,12)
-    val row4 = list.slice(12,16)
-
-    new Grid( List(row1, row2, row3, row4) )
+    new Grid(letters.toList)
   }
 }
 
