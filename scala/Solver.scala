@@ -46,8 +46,8 @@ object Word {
   // actual score = 3 * 10 = 30
   def score(word:String) = scrabbleScore(word) * word.length
   
-  val WORDS = io.Source.fromFile("3letters.dictionary").getLines.toList :::
-              io.Source.fromFile("4letters.dictionary").getLines.toList
+  val WORDS = io.Source.fromFile("dict/3letters").getLines.toList :::
+              io.Source.fromFile("dict/4letters").getLines.toList
   
   def isWord(word:String) = WORDS contains word
 
