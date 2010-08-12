@@ -98,8 +98,14 @@ class Grid(val letters : List[String], val wordBucket : WordBucket) {
 
   val score = this.calculateScore()
   
-  def nextMove() = {
-    new Grid(letters, wordBucket.merge(validWords))
+  def nextMove(swap1:Int, swap2:Int) = {
+    val letter1 = letters(swap1)
+    val letter2 = letters(swap2)
+    
+    val newLetters = letters.patch(swap1, List(letter2), 1)
+                            .patch(swap2, List(letter1), 1)
+
+    new Grid(newLetters, wordBucket.merge(validWords))
   }
 }
 
@@ -202,10 +208,12 @@ val grid = Grid(
 )
 
 println(grid.validWords)
+println(grid.score)
 
-val grid2 = grid.nextMove()
+val grid2 = grid.nextMove(0,6)
 
 println(grid2.validWords)
+println(grid2.score)
 
 { // stick the assertions in a block so i can code fold them
   
