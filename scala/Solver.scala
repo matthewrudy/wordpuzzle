@@ -160,8 +160,8 @@ println("is poo valid at 'row1-4'? " + newbie.valid("row1-4", "POO"))
 println("is guff valid at 'col1-4'? " + newbie.valid("col1-4", "GUFF"))
 
 object Grid {
-
-  val POSITIONS = Map(
+  
+  val ROW_POSITIONS = Map(
     "row1-4"  -> List( 0, 1, 2, 3),
     "row1-3a" -> List( 0, 1, 2   ),
     "row1-3b" -> List(    1, 2, 3),
@@ -176,8 +176,10 @@ object Grid {
 
     "row4-4"  -> List(12,13,14,15),
     "row4-3a" -> List(12,13,14   ),
-    "row4-3b" -> List(   13,14,15),
+    "row4-3b" -> List(   13,14,15)
+  )
 
+  val COL_POSITIONS = Map(
     "col1-4"  -> List( 0, 4, 8,12),
     "col1-3a" -> List( 0, 4, 8   ),
     "col1-3b" -> List(    4, 8,12),
@@ -194,6 +196,8 @@ object Grid {
     "col4-3a" -> List( 3, 7,11   ),
     "col4-3b" -> List(    7,11,15)
   )
+  
+  val POSITIONS = ROW_POSITIONS ++ COL_POSITIONS
 
   def apply(letters:String*) = {
     new Grid(letters.toList, WordBucket())
