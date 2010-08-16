@@ -63,15 +63,22 @@ object Grid {
   def getRow(position:Int) = position / 4
   def getCol(position:Int) = position % 4
   
-  /*val ROW1 = List( 0, 1, 2, 3)
-    val ROW2 = List( 4, 5, 6, 7)
-    val ROW3 = List( 8, 9,10,11)
-    val ROW4 = List(12,13,14,15)
+  def rowMates(position:Int) = ROWS(getRow(position))
+  def colMates(position:Int) = COLS(getCol(position))
+  
+  val ROWS = List(
+    List( 0, 1, 2, 3),
+    List( 4, 5, 6, 7),
+    List( 8, 9,10,11),
+    List(12,13,14,15)
+  )
     
-    val COL1 = List( 0, 4, 8,12)
-    val COL2 = List( 1, 5, 9,13)
-    val COL3 = List( 2, 6,10,14)
-    val COL4 = List( 3, 7,11,15)*/
+  val COLS = List(
+    List( 0, 4, 8,12),
+    List( 1, 5, 9,13),
+    List( 2, 6,10,14),
+    List( 3, 7,11,15)
+  )
   
   val ROW_POSITIONS = Map(
     "row1-4"  -> List( 0, 1, 2, 3),
@@ -155,6 +162,40 @@ class WordBucket(val bucket:Map[String, Set[String]]) {
       
 }
 
-object Highlighting {
+class HighlightingGrid(val grid: Array[Boolean]) {  
+  
+  def nextMove(swap1:Int, swap2:Int) = {
+    val nextGrid = this.grid.clone
+    
+    Array(swap1, swap2).foreach { position =>
+      Grid.rowMates(position).foreach { p =>
+        nextGrid(p) = true
+      }
+      Grid.colMates(position).foreach { p =>
+        nextGrid(p) = true
+      }
+    }
+    
+    new HighlightingGrid(nextGrid)
+  }
 }
+
+object HighlightingGrid {
+  
+  val DEFAULT_HIGHLIGHTING = Array(
+    false, false, false, false,
+    false, false, false, false,
+    false, false, false, false,
+    false, false, false, false
+  )
+  
+  def apply() = {
+    new HighlightingGrid(DEFAULT_HIGHLIGHTING)
+  }
+  
+}
+
+
+
+
   
