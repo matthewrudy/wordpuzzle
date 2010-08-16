@@ -31,6 +31,13 @@ class Grid(val letters : List[String], val wordBucket : WordBucket) {
 
     new Grid(newLetters, wordBucket.merge(validWords))
   }
+  
+  def allNextMoves() = {
+    for(i <- 0 until 15; j <- i+1 to 15) {
+      val next = nextMove(i, j)
+      println("score : " + next.score)
+    }
+  }
 }
 
 object Grid {
@@ -76,6 +83,7 @@ object Grid {
   def apply(letters:String*) = {
     new Grid(letters.toList, WordBucket())
   }
+  
 }
 
 object WordBucket {
