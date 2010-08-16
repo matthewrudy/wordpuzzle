@@ -38,6 +38,9 @@ object Tests {
       
       val g3 = g2.nextMove(14,11)
       assert(g3.disabled.length == 0)
+      
+      val g4 = g3.nextMove(13,12)
+      assert(g4.all)
     }
     
     { // Grid tests

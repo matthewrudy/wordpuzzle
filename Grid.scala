@@ -164,23 +164,46 @@ class WordBucket(val bucket:Map[String, Set[String]]) {
       
 }
 
-class HighlightingGrid(val grid: Array[Boolean]) {  
+class AllHighlightedGrid() extends HighlightingGridBase {
+  
+  override val all = true
+  val disabled : List[Int] = List()
+  
+  def nextMove(swap1:Int, swap2:Int) = {
+    this
+  }
+}
+
+abstract class HighlightingGridBase {
+  
+  val all = false
+  val disabled : List[Int]
+  
+  def nextMove(swap1:Int, swap2:Int) : HighlightingGridBase
+}
+
+class HighlightingGrid(val grid: Array[Boolean]) extends HighlightingGridBase {  
   
   val disabled = Grid.INDICES.filter { position => !grid(position) }
   
   def nextMove(swap1:Int, swap2:Int) = {
-    val nextGrid = this.grid.clone
-    
-    Array(swap1, swap2).foreach { position =>
-      Grid.rowMates(position).foreach { p =>
-        nextGrid(p) = true
-      }
-      Grid.colMates(position).foreach { p =>
-        nextGrid(p) = true
-      }
+    if(this.disabled.length == 0) {
+      new AllHighlightedGrid()
     }
+    else {
+      val nextGrid = this.grid.clone
     
-    new HighlightingGrid(nextGrid)
+      Array(swap1, swap2).foreach { position =>
+        Grid.rowMates(position).foreach { p =>
+          nextGrid(p) = true
+        }
+        Grid.colMates(position).foreach { p =>
+          nextGrid(p) = true
+        }
+      }
+    
+      new HighlightingGrid(nextGrid)
+    }
   }
 }
 
