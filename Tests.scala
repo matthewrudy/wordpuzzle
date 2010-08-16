@@ -30,6 +30,13 @@ object Tests {
     }
 
     { // Grid tests
+      
+      assert(Grid.getRow(0) == 0)
+      assert(Grid.getCol(0) == 0)
+      assert(Grid.getRow(15)== 3)
+      assert(Grid.getCol(15)== 3)
+      assert(Grid.getRow(9) == 2)
+      assert(Grid.getCol(9) == 1)
   
       val grid1 = Grid(
         "B", "A", "R", "B",
