@@ -60,6 +60,8 @@ class Grid(val letters : List[String], val wordBucket : WordBucket) {
 
 object Grid {
   
+  val INDICES = List(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15)
+  
   def getRow(position:Int) = position / 4
   def getCol(position:Int) = position % 4
   
@@ -163,6 +165,8 @@ class WordBucket(val bucket:Map[String, Set[String]]) {
 }
 
 class HighlightingGrid(val grid: Array[Boolean]) {  
+  
+  val disabled = Grid.INDICES.filter { position => !grid(position) }
   
   def nextMove(swap1:Int, swap2:Int) = {
     val nextGrid = this.grid.clone

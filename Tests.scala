@@ -29,6 +29,17 @@ object Tests {
       assert(newbie.valid("col1-4", "GUFF"), "guff is not still valid at col1-4")
     }
 
+    { // HighlightingGrid tests
+      val g1 = HighlightingGrid()
+      assert(g1.disabled.length == 16)
+      
+      val g2 = g1.nextMove(0,1)
+      assert(g2.disabled.length == 6)
+      
+      val g3 = g2.nextMove(14,11)
+      assert(g3.disabled.length == 0)
+    }
+    
     { // Grid tests
       
       assert(Grid.getRow(0) == 0)
