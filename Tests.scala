@@ -47,9 +47,7 @@ object Tests {
       assert(Word.score("JAR") == 30,      "JAR is 30")
       
       assert(grid1.score == 92, "grid's score is BAR + BARB + ARB + JAR = 92")
-
-      // grid1.allNextMoves()
-     
+      
       val grid2 = grid1.nextMove(0,6)
       val grid2Words = grid2.validWords.values.toSet
       assert(Set("FAB", "JAR", "BAR") == grid2Words, "words not as expected " + grid2Words)

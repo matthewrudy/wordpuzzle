@@ -1,3 +1,5 @@
+import scala.actors.Actor._
+
 class Grid(val letters : List[String], val wordBucket : WordBucket) {
   
   val possibleWords = Grid.POSITIONS.map { p =>
@@ -30,6 +32,22 @@ class Grid(val letters : List[String], val wordBucket : WordBucket) {
                             .patch(swap2, List(letter1), 1)
 
     new Grid(newLetters, wordBucket.merge(validWords))
+  }
+  
+  def bestMove() = {
+    var bestest : Grid = null
+    
+    for(i <- 0 until 15; j <- i+1 to 15) {
+      
+      val next = nextMove(i, j)
+      
+      if (bestest == null)
+        bestest = next
+      else if (next.score > bestest.score)
+        bestest = next
+    
+    }
+    bestest
   }
   
   def allNextMoves() = {
