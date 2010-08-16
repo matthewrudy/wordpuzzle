@@ -1,34 +1,26 @@
 class Grid(val letters : List[String], val wordBucket : WordBucket) {
-
-  def calculateScore() = {
-    validWords.foldLeft(0) { (sum, p) =>
-      val position = p._1
-      val word     = p._2
-      
-      sum + Word.score(word)
-    }
-  }
   
-  def validWords() = {
-    possibleWords.filter { p =>
-      val position = p._1
-      val word     = p._2
-      
-      Word.isWord(word) && wordBucket.valid(position, word)
-    }
-  }
-  
-  def possibleWords = {
-    Grid.POSITIONS.map { p =>
+  val possibleWords = Grid.POSITIONS.map { p =>
       val position = p._1
       val indices  = p._2
       val word     = indices.map(index => letters(index)).mkString("")
       
       position -> word
     }
-  }
+    
+  val validWords = possibleWords.filter { p =>
+        val position = p._1
+        val word     = p._2
 
-  val score = this.calculateScore()
+        Word.isWord(word) && wordBucket.valid(position, word)
+      }
+
+  val score = validWords.foldLeft(0) { (sum, p) =>
+        val position = p._1
+        val word     = p._2
+
+        sum + Word.score(word)
+      }
   
   def nextMove(swap1:Int, swap2:Int) = {
     val letter1 = letters(swap1)
