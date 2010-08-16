@@ -1,6 +1,8 @@
+#!/usr/bin/env ruby
+
 # use:
 #
-#  ruby utils/build_dictionary.rb http://scrabutility.com/3_SOWPODS.php > 3letters.dictionary
+#  utils/build_dictionary.rb http://scrabutility.com/3_SOWPODS.php > dict/3letters
 require 'rubygems'
 require 'open-uri'
 require 'hpricot'
