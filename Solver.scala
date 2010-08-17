@@ -1,13 +1,10 @@
 object Solver {
 
-  def main(args:Array[String]) {
+  // scala Solver E T W D I N L A M A L Y E Y E I
+  
+  def main(letters:Array[String]) {
 
-    val ex1 = Grid(
-      "E", "I", "P", "X",
-      "U", "R", "O", "A",
-      "A", "W", "E", "H",
-      "E", "A", "I", "E"
-      )
+    val ex1 = Grid(letters)
       
     ex1.print()
     

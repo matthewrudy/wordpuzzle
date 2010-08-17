@@ -199,10 +199,17 @@ object Grid {
       }
     }*/
 
-  def apply(letters:String*) = {
-    new Grid(letters.toList, WordBucket(), HighlightingGrid())
+  def apply(letters:String*) : Grid = {
+    Grid(letters.toList)
   }
   
+  def apply(letters:Array[String]) : Grid = {
+    Grid(letters.toList)
+  }
+  
+  def apply(letters:List[String]) : Grid = {
+    new Grid(letters, WordBucket(), HighlightingGrid())
+  }
 }
 
 object WordBucket {
