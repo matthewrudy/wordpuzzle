@@ -55,7 +55,7 @@ class Grid(val letters:List[String], val wordBucket:WordBucket, val highlighting
   }
 
   val baseScore = validWords.foldLeft(0) { (sum, p) =>
-    val position = p._1
+    // val position = p._1
     val word     = p._2
 
     sum + Word.score(word)
@@ -107,8 +107,6 @@ class Grid(val letters:List[String], val wordBucket:WordBucket, val highlighting
           if (thisScore > bestScore) {
             bestScore = thisScore
             bestest = List(move1, move2)
-          
-            // println("new two move best score " + bestScore)
           }
         }
       }  
@@ -156,9 +154,10 @@ class Grid(val letters:List[String], val wordBucket:WordBucket, val highlighting
       }
       println(line.mkString(""))                 
     }
-    println("score: " + baseScore + " + " + bonusScore + " = " + score)
+    println()
     println("words: " + words.map{ word => word+"("+Word.score(word)+")" }.mkString(", "))
     println("bonus: " + bonusWords.map{ word => word+"("+Word.score(word)+")" }.mkString(", "))
+    println("score: " + baseScore + " + " + bonusScore + " = " + score)
     println("")
   }
 }
@@ -167,11 +166,13 @@ object Grid {
   
   val INDICES = List(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15)
   
-  def getRow(position:Int) = position / 4
-  def getCol(position:Int) = position % 4
+  val INDEX_TO_ROW = INDICES.map { index => (index -> index / 4) }.toMap
+  val INDEX_TO_COL = INDICES.map { index => (index -> index % 4) }.toMap
+  def getRow(index:Int) = INDEX_TO_ROW(index)
+  def getCol(index:Int) = INDEX_TO_COL(index)
   
-  def rowMates(position:Int) = ROWS(getRow(position))
-  def colMates(position:Int) = COLS(getCol(position))
+  def rowMates(index:Int) = ROWS(getRow(index))
+  def colMates(index:Int) = COLS(getCol(index))
   
   val ROWS = List(
     Set( 0, 1, 2, 3),
@@ -228,7 +229,7 @@ object Grid {
   val ROW_POSITION_NAMES = ROW_POSITIONS.keys.toSet
   val COL_POSITION_NAMES = COL_POSITIONS.keys.toSet
   
-  val POSITIONS_FOR_INDEX = (0 to 15).map { index =>
+  val POSITIONS_FOR_INDEX = INDICES.map { index =>
     val thesePositions = POSITIONS.filter { p =>
       val name = p._1
       val indices = p._2
@@ -302,9 +303,7 @@ class AllHighlightedGrid() extends HighlightingGridBase {
   
   def isPositionClear(position:String) = true
   
-  def nextMove(swap1:Int, swap2:Int) = {
-    this
-  }
+  def nextMove(swap1:Int, swap2:Int) = this
 }
 
 abstract class HighlightingGridBase {
@@ -320,7 +319,7 @@ abstract class HighlightingGridBase {
 
 class HighlightingGrid(val grid: Array[Boolean]) extends HighlightingGridBase {  
   
-  val disabled = Grid.INDICES.filter { position => !grid(position) }
+  val disabled          = Grid.INDICES.filter { index => !grid(index) }
   val disabledPositions = Grid.POSITIONS.filter { p =>
     val indices = p._2
     !(this.disabled intersect indices).isEmpty
@@ -331,22 +330,22 @@ class HighlightingGrid(val grid: Array[Boolean]) extends HighlightingGridBase {
   }
   
   def nextMove(swap1:Int, swap2:Int) = {
-    if(this.disabled.length == 0) {
-      new AllHighlightedGrid()
+    val nextGrid = this.grid.clone
+  
+    Array(swap1, swap2).foreach { position =>
+      Grid.rowMates(position).foreach { p =>
+        nextGrid(p) = true
+      }
+      Grid.colMates(position).foreach { p =>
+        nextGrid(p) = true
+      }
+    }
+    
+    if(nextGrid.contains(false)) {
+      new HighlightingGrid(nextGrid)
     }
     else {
-      val nextGrid = this.grid.clone
-    
-      Array(swap1, swap2).foreach { position =>
-        Grid.rowMates(position).foreach { p =>
-          nextGrid(p) = true
-        }
-        Grid.colMates(position).foreach { p =>
-          nextGrid(p) = true
-        }
-      }
-    
-      new HighlightingGrid(nextGrid)
+      new AllHighlightedGrid()
     }
   }
 }
