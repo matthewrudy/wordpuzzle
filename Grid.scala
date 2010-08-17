@@ -1,28 +1,33 @@
 import scala.actors.Actor._
 
-class Grid(val letters : List[String], val wordBucket : WordBucket) {
+class Grid(val letters:List[String], val wordBucket:WordBucket, val highlighting:HighlightingGridBase) {
   
-  val possibleWords = Grid.POSITIONS.map { p =>
-      val position = p._1
-      val indices  = p._2
-      val word     = indices.map(index => letters(index)).mkString("")
-      
-      position -> word
-    }
+  val possiblePositions = Grid.POSITIONS.filter { p => 
+    val position = p._1
+    highlighting.isPositionClear(position)
+  }
+  
+  val possibleWords = possiblePositions.map { p =>
+    val position = p._1
+    val indices  = p._2
+    val word     = indices.map(index => letters(index)).mkString("")
+    
+    position -> word
+  }
     
   val validWords = possibleWords.filter { p =>
-        val position = p._1
-        val word     = p._2
+    val position = p._1
+    val word     = p._2
 
-        Word.isWord(word) && wordBucket.valid(position, word)
-      }
+    Word.isWord(word) && wordBucket.valid(position, word)
+  }
 
   val score = validWords.foldLeft(0) { (sum, p) =>
-        val position = p._1
-        val word     = p._2
+    val position = p._1
+    val word     = p._2
 
-        sum + Word.score(word)
-      }
+    sum + Word.score(word)
+  }
   
   def nextMove(swap1:Int, swap2:Int) = {
     val letter1 = letters(swap1)
@@ -31,7 +36,7 @@ class Grid(val letters : List[String], val wordBucket : WordBucket) {
     val newLetters = letters.patch(swap1, List(letter2), 1)
                             .patch(swap2, List(letter1), 1)
 
-    new Grid(newLetters, wordBucket.merge(validWords))
+    new Grid(newLetters, wordBucket.merge(validWords), highlighting.nextMove(swap1, swap2))
   }
   
   def bestMove() = {
@@ -121,7 +126,7 @@ object Grid {
   val POSITIONS = ROW_POSITIONS ++ COL_POSITIONS
 
   def apply(letters:String*) = {
-    new Grid(letters.toList, WordBucket())
+    new Grid(letters.toList, WordBucket(), HighlightingGrid())
   }
   
 }

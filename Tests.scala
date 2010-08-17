@@ -60,13 +60,16 @@ object Tests {
       assert(Grid.getRow(9) == 2)
       assert(Grid.getCol(9) == 1)
   
-      val grid1 = Grid(
+      val grid0 = Grid(
         "B", "A", "R", "B",
         "F", "A", "J", "E",
         "H", "A", "A", "A",
         "G", "N", "R", "A"
       )
+      val grid0Words = grid0.validWords.values.toSet
+      assert(Set() == grid0Words, "no words for the starting grid")
       
+      val grid1 = grid0.nextMove(1,10)
       val grid1Words = grid1.validWords.values.toSet
       assert(Set("BARB", "BAR", "ARB", "JAR") == grid1Words, "words not as expected " + grid1Words)
   
