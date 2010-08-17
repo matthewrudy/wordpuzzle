@@ -228,13 +228,19 @@ object Grid {
   val ROW_POSITION_NAMES = ROW_POSITIONS.keys.toSet
   val COL_POSITION_NAMES = COL_POSITIONS.keys.toSet
   
-  def positionsForIndex(index:Int) = {
-    POSITIONS.filter { p =>
+  val POSITIONS_FOR_INDEX = (0 to 15).map { index =>
+    val thesePositions = POSITIONS.filter { p =>
       val name = p._1
       val indices = p._2
       
       indices.contains(index)
     }.keys.toSet
+    
+    (index -> thesePositions)
+  }.toMap
+  
+  def positionsForIndex(index:Int) = {
+    POSITIONS_FOR_INDEX(index)
   }
 
   def apply(letters:String*) : Grid = {
