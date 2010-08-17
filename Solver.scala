@@ -13,9 +13,9 @@ object Solver {
   def main(letters:Array[String]) {
     
     println()
-
+    
+    println("initial:")
     val ex1 = Grid(letters)
-      
     ex1.print()
     
     val next3 = ex1.best3Moves

@@ -97,7 +97,7 @@ class Grid(val letters:List[String], val wordBucket:WordBucket, val highlighting
     for(i1 <- 0 until 15; j1 <- i1+1 to 15) {
       val move1 = nextMove(i1, j1)
       
-      if(move1.score > 0) { // cut out maybe 30% of cases which are 0 score
+      if(move1.score > Grid.MINIMUM_MOVE) { // cut out maybe 30% of cases which are 0 score
       
         for(i2 <- 0 until 15; j2 <- i2+1 to 15) {
           val move2 = move1.nextMove(i2, j2)
@@ -121,12 +121,12 @@ class Grid(val letters:List[String], val wordBucket:WordBucket, val highlighting
     for(i <- 0 until 15; j <- i+1 to 15) {
       val move1 = nextMove(i, j)
       
-      if(move1.score > 0) { // cut out maybe 30% of cases which are 0 score
+      if(move1.score > Grid.MINIMUM_MOVE) { // cut out maybe 30% of cases which are 0 score
       
         for(i <- 0 until 15; j <- i+1 to 15) {
           val move2 = move1.nextMove(i, j)
         
-          if(move2.score > 0) { // cut out maybe 30% of cases here as well
+          if(move2.score > Grid.MINIMUM_MOVE) { // cut out maybe 30% of cases here as well
             
             for(i <- 0 until 15; j <- i+1 to 15) {
               val move3 = move2.nextMove(i, j)
@@ -146,7 +146,7 @@ class Grid(val letters:List[String], val wordBucket:WordBucket, val highlighting
   }
   
   def print() {
-    
+    println()
     (0 to 15).grouped(4).foreach { group =>
       val line = group.map { index =>
         if(swapped.contains(index)) "("+letters(index)+")"
@@ -163,6 +163,8 @@ class Grid(val letters:List[String], val wordBucket:WordBucket, val highlighting
 }
 
 object Grid {
+  
+  val MINIMUM_MOVE = 10
   
   val INDICES = List(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15)
   
