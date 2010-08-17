@@ -130,6 +130,20 @@ object Grid {
   )
   
   val POSITIONS = ROW_POSITIONS ++ COL_POSITIONS
+  
+  def indexToRowPositions(index) = {
+    ROW_POSITIONS.filter { p =>
+      val indices = p._2
+      indices contains index
+    }
+  }
+  
+  def indexToColPositions(index) = {
+    COL_POSITIONS.filter { p =>
+      val indices = p._2
+      indices contains index
+    }
+  }
 
   def apply(letters:String*) = {
     new Grid(letters.toList, WordBucket(), HighlightingGrid())
