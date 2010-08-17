@@ -32,15 +32,23 @@ object Tests {
     { // HighlightingGrid tests
       val g1 = HighlightingGrid()
       assert(g1.disabled.length == 16)
+      assert(!g1.isPositionClear("row1-4"))
+      assert(!g1.isPositionClear("col3-3a"))
       
       val g2 = g1.nextMove(0,1)
       assert(g2.disabled.length == 6)
+      assert(g2.isPositionClear("row1-4"))
+      assert(!g2.isPositionClear("col3-3a"))
       
       val g3 = g2.nextMove(14,11)
       assert(g3.disabled.length == 0)
+      assert(g3.isPositionClear("row1-4"))
+      assert(g3.isPositionClear("col3-3a"))
       
       val g4 = g3.nextMove(13,12)
       assert(g4.all)
+      assert(g4.isPositionClear("row1-4"))
+      assert(g4.isPositionClear("col3-3a"))
     }
     
     { // Grid tests

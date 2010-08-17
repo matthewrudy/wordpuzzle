@@ -167,7 +167,10 @@ class WordBucket(val bucket:Map[String, Set[String]]) {
 class AllHighlightedGrid() extends HighlightingGridBase {
   
   override val all = true
-  val disabled : List[Int] = List()
+  val disabled          = List()
+  val disabledPositions = List()
+  
+  def isPositionClear(position:String) = true
   
   def nextMove(swap1:Int, swap2:Int) = {
     this
@@ -177,7 +180,10 @@ class AllHighlightedGrid() extends HighlightingGridBase {
 abstract class HighlightingGridBase {
   
   val all = false
-  val disabled : List[Int]
+  val disabled          : List[Int]
+  val disabledPositions : List[String]
+  
+  def isPositionClear(position:String) : Boolean
   
   def nextMove(swap1:Int, swap2:Int) : HighlightingGridBase
 }
@@ -185,6 +191,14 @@ abstract class HighlightingGridBase {
 class HighlightingGrid(val grid: Array[Boolean]) extends HighlightingGridBase {  
   
   val disabled = Grid.INDICES.filter { position => !grid(position) }
+  val disabledPositions = Grid.POSITIONS.filter { p =>
+    val indices = p._2
+    !(this.disabled intersect indices).isEmpty
+  }.keys.toList
+  
+  def isPositionClear(position:String) = {
+    !(disabledPositions contains position)
+  }
   
   def nextMove(swap1:Int, swap2:Int) = {
     if(this.disabled.length == 0) {
