@@ -11,6 +11,8 @@ object Solver {
   
   */
   def main(letters:Array[String]) {
+    
+    println()
 
     val ex1 = Grid(letters)
       

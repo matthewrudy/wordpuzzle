@@ -1,4 +1,4 @@
-class Grid(val letters:List[String], val wordBucket:WordBucket, val highlighting:HighlightingGridBase) {
+class Grid(val letters:List[String], val wordBucket:WordBucket, val highlighting:HighlightingGridBase, val swapped:Set[Int]) {
   
   val possiblePositions = Grid.POSITIONS.filter { p => 
     val position = p._1
@@ -72,7 +72,7 @@ class Grid(val letters:List[String], val wordBucket:WordBucket, val highlighting
     val newLetters = letters.patch(swap1, List(letter2), 1)
                             .patch(swap2, List(letter1), 1)
 
-    new Grid(newLetters, wordBucket.merge(validWords), highlighting.nextMove(swap1, swap2))
+    new Grid(newLetters, wordBucket.merge(validWords), highlighting.nextMove(swap1, swap2), Set(swap1, swap2))
   }
   
   def bestMove() = {
@@ -148,8 +148,13 @@ class Grid(val letters:List[String], val wordBucket:WordBucket, val highlighting
   }
   
   def print() {
-    this.letters.grouped(4).foreach { group =>
-      println(group.mkString(", "))                       
+    
+    (0 to 15).grouped(4).foreach { group =>
+      val line = group.map { index =>
+        if(swapped.contains(index)) "("+letters(index)+")"
+        else " "+letters(index)+" "
+      }
+      println(line.mkString(""))                 
     }
     println("score: " + baseScore + " + " + bonusScore + " = " + score)
     println("words: " + words.map{ word => word+"("+Word.score(word)+")" }.mkString(", "))
@@ -241,7 +246,7 @@ object Grid {
   }
   
   def apply(letters:List[String]) : Grid = {
-    new Grid(letters, WordBucket(), HighlightingGrid())
+    new Grid(letters, WordBucket(), HighlightingGrid(), Set[Int]())
   }
 }
 
