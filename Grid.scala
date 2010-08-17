@@ -1,5 +1,3 @@
-import scala.actors.Actor._
-
 class Grid(val letters:List[String], val wordBucket:WordBucket, val highlighting:HighlightingGridBase) {
   
   val possiblePositions = Grid.POSITIONS.filter { p => 
@@ -14,7 +12,8 @@ class Grid(val letters:List[String], val wordBucket:WordBucket, val highlighting
     
     position -> word
   }
-    
+  
+  // Map("col1-4" -> "AXE", "row2-3a" -> "HEX")
   val validWords = possibleWords.filter { p =>
     val position = p._1
     val word     = p._2
@@ -22,14 +21,43 @@ class Grid(val letters:List[String], val wordBucket:WordBucket, val highlighting
     Word.isWord(word) && wordBucket.valid(position, word)
   }
   
-  val words = validWords.values.toSet
+  val words = validWords.values.toSet       // Set("AXE", "HEX")
+  
+  val wordPositions = validWords.keys.toSet // Set("col1-4", "row-2-3a")
+  val rowWordPositions = wordPositions.intersect(Grid.ROW_POSITION_NAMES)
+  val colWordPositions = wordPositions.intersect(Grid.COL_POSITION_NAMES)
+  
+  val rowCells = rowWordPositions.map { position =>
+    Grid.POSITIONS(position)
+  }.flatten
+  
+  val colCells = colWordPositions.map { position =>
+    Grid.POSITIONS(position)
+  }.flatten
+  
+  val intersectionCells = rowCells.intersect(colCells)
+  
+  val bonusWords = intersectionCells.map{ index =>
+    val positions = Grid.positionsForIndex(index).intersect(wordPositions)
+    
+    positions.foldLeft(0) { (bestSoFar, thisPosition) =>
+      val thisWord = validWords(thisPosition)
+      val thisScore = Word.score(thisWord)
+      
+      scala.math.max(bestSoFar, thisScore)
+    }
+  }
 
-  val score = validWords.foldLeft(0) { (sum, p) =>
+  val baseScore = validWords.foldLeft(0) { (sum, p) =>
     val position = p._1
     val word     = p._2
 
     sum + Word.score(word)
   }
+  
+  val bonusScore = bonusWords.sum
+  
+  val score = baseScore + bonusScore
   
   def nextMove(swap1:Int, swap2:Int) = {
     val letter1 = letters(swap1)
@@ -117,8 +145,9 @@ class Grid(val letters:List[String], val wordBucket:WordBucket, val highlighting
     this.letters.grouped(4).foreach { group =>
       println(group.mkString(", "))                       
     }
-    println("score: " + score)
+    println("score: " + baseScore)
     println("words: " + words)
+    println("bonus: " + bonusScore)
     println("")
   }
 }
@@ -134,17 +163,17 @@ object Grid {
   def colMates(position:Int) = COLS(getCol(position))
   
   val ROWS = List(
-    List( 0, 1, 2, 3),
-    List( 4, 5, 6, 7),
-    List( 8, 9,10,11),
-    List(12,13,14,15)
+    Set( 0, 1, 2, 3),
+    Set( 4, 5, 6, 7),
+    Set( 8, 9,10,11),
+    Set(12,13,14,15)
   )
     
   val COLS = List(
-    List( 0, 4, 8,12),
-    List( 1, 5, 9,13),
-    List( 2, 6,10,14),
-    List( 3, 7,11,15)
+    Set( 0, 4, 8,12),
+    Set( 1, 5, 9,13),
+    Set( 2, 6,10,14),
+    Set( 3, 7,11,15)
   )
   
   val ROW_POSITIONS = Map(
@@ -185,19 +214,17 @@ object Grid {
   
   val POSITIONS = ROW_POSITIONS ++ COL_POSITIONS
   
-  /*def indexToRowPositions(index) = {
-      ROW_POSITIONS.filter { p =>
-        val indices = p._2
-        indices contains index
-      }
-    }
-    
-    def indexToColPositions(index) = {
-      COL_POSITIONS.filter { p =>
-        val indices = p._2
-        indices contains index
-      }
-    }*/
+  val ROW_POSITION_NAMES = ROW_POSITIONS.keys.toSet
+  val COL_POSITION_NAMES = COL_POSITIONS.keys.toSet
+  
+  def positionsForIndex(index:Int) = {
+    POSITIONS.filter { p =>
+      val name = p._1
+      val indices = p._2
+      
+      indices.contains(index)
+    }.keys.toSet
+  }
 
   def apply(letters:String*) : Grid = {
     Grid(letters.toList)

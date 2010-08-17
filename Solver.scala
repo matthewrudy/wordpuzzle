@@ -2,6 +2,14 @@ object Solver {
 
   // scala Solver E T W D I N L A M A L Y E Y E I
   
+  /* val example = Grid(
+      "E", "T", "W", "D",
+      "I", "N", "L", "A",
+      "M", "A", "L", "Y",
+      "E", "Y", "E", "I"
+    )
+  
+  */
   def main(letters:Array[String]) {
 
     val ex1 = Grid(letters)
