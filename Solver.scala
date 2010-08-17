@@ -10,12 +10,31 @@ object Solver {
       )
       
     ex1.print()
-    println("example 1 score : "+ex1.score)
-    println("words: " +ex1.validWords)
     
-    val ex2 = ex1.nextMove(3,11)
-    ex2.print()
-    println("example 2 score : "+ex2.score)
-    println("words: " +ex2.validWords)
+    val next2 = ex1.best2Moves
+    val move1 = next2(0)
+    move1.print
+    val move2 = next2(1)
+    move2.print
+    
+    val last2 = move2.best2Moves
+    val move3 = last2(0)
+    move3.print
+    val move4 = last2(1)
+    move4.print
+    
+    val move5 = move2.bestMove
+    move5.print
+    
+   /* val move1 = ex1.bestMove
+       move1.print
+       val move2 = move1.bestMove
+       move2.print
+       val move3 = move2.bestMove
+       move3.print
+       val move4 = move3.bestMove
+       move4.print
+       val move5 = move4.bestMove
+       move5.print*/
   }
 }

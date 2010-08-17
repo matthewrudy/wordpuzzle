@@ -21,6 +21,8 @@ class Grid(val letters:List[String], val wordBucket:WordBucket, val highlighting
 
     Word.isWord(word) && wordBucket.valid(position, word)
   }
+  
+  val words = validWords.values.toSet
 
   val score = validWords.foldLeft(0) { (sum, p) =>
     val position = p._1
@@ -40,32 +42,53 @@ class Grid(val letters:List[String], val wordBucket:WordBucket, val highlighting
   }
   
   def bestMove() = {
+    var bestScore = Int.MinValue
     var bestest : Grid = null
     
     for(i <- 0 until 15; j <- i+1 to 15) {
       
       val next = nextMove(i, j)
       
-      if (bestest == null)
+      if (next.score > bestScore)
         bestest = next
-      else if (next.score > bestest.score)
-        bestest = next
-    
+        bestScore = next.score
     }
     bestest
   }
   
-  def allNextMoves() = {
-    for(i <- 0 until 15; j <- i+1 to 15) {
-      val next = nextMove(i, j)
-      println("score : " + next.score)
+  def best2Moves() = {
+    var bestScore = Int.MinValue
+    var bestMoves : List[Grid] = null
+    
+    for(i1 <- 0 until 15; j1 <- i1+1 to 15) {
+      val move1 = nextMove(i1, j1)
+      
+      if(move1.score > 0) { // cut out maybe 30% of cases which are 0 score
+      
+        for(i2 <- 0 until 15; j2 <- i2+1 to 15) {
+          val move2 = move1.nextMove(i2, j2)
+        
+          val thisScore = move1.score + move2.score
+              
+          if (thisScore > bestScore) {
+            bestScore = thisScore
+            bestMoves = List(move1, move2)
+          
+            // println("new two move best score " + bestScore)
+          }
+        }
+      }  
     }
+    bestMoves
   }
   
   def print() {
     this.letters.grouped(4).foreach { group =>
       println(group.mkString(", "))                       
     }
+    println("score: " + score)
+    println("words: " + words)
+    println("")
   }
 }
 
@@ -131,19 +154,19 @@ object Grid {
   
   val POSITIONS = ROW_POSITIONS ++ COL_POSITIONS
   
-  def indexToRowPositions(index) = {
-    ROW_POSITIONS.filter { p =>
-      val indices = p._2
-      indices contains index
+  /*def indexToRowPositions(index) = {
+      ROW_POSITIONS.filter { p =>
+        val indices = p._2
+        indices contains index
+      }
     }
-  }
-  
-  def indexToColPositions(index) = {
-    COL_POSITIONS.filter { p =>
-      val indices = p._2
-      indices contains index
-    }
-  }
+    
+    def indexToColPositions(index) = {
+      COL_POSITIONS.filter { p =>
+        val indices = p._2
+        indices contains index
+      }
+    }*/
 
   def apply(letters:String*) = {
     new Grid(letters.toList, WordBucket(), HighlightingGrid())
