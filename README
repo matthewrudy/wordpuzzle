@@ -1,0 +1,76 @@
+> scalac Word.scala
+> scalac Grid.scala
+> scalac Solver.scala
+> time scala Solver G D E L L E U S R N S B I N E E
+
+initial:
+
+ G  D  E  L 
+ L  E  U  S 
+ R  N  S  B 
+ I  N  E  E 
+
+words: 
+bonus: 
+score: 0 + 0 = 0
+
+move 1:
+
+ G (I) E  L 
+ L  E  U  S 
+ R  N  S  B 
+(D) N  E  E 
+
+words: GIE(12), NEE(9)
+bonus: 
+score: 21 + 0 = 21
+
+move 2:
+
+ G  I (R) L 
+ L  E  U  S 
+(E) N  S  B 
+ D  N  E  E 
+
+words: GLED(24), LEU(9), GIRL(20), LED(12), RUSE(16), ENS(9), USE(9)
+bonus: GLED(24), RUSE(16), RUSE(16), GIRL(20), GLED(24), GLED(24)
+score: 99 + 124 = 223
+
+move 3:
+
+ G  I  R  L 
+ L  E  U  S 
+ E  N (D) B 
+(S) N  E  E 
+
+words: RUDE(20), LES(9), RUD(12), SNEE(16), END(12)
+bonus: RUDE(20), RUDE(20), SNEE(16), END(12)
+score: 69 + 68 = 137
+
+move 4:
+
+ G (U) R  L 
+ L  E (I) S 
+ E  N  D  B 
+ S  N  E  E 
+
+words: GUR(12), RID(12), IDE(12), RIDE(20), GURL(20), LEI(9), LEIS(16)
+bonus: LEIS(16), RIDE(20)
+score: 101 + 36 = 137
+
+move 5:
+
+ G  U (L) L 
+(R) E  I  S 
+ E  N  D  B 
+ S  N  E  E 
+
+words: GUL(12), LID(12), GULL(20), REIS(16), REI(9), RES(9)
+bonus: REIS(16), GULL(20), REIS(16)
+score: 78 + 52 = 130
+
+total: 648
+
+real	0m47.964s
+user	0m51.422s
+sys	0m0.976s
