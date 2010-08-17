@@ -35,8 +35,8 @@ object Solver {
     val move5 = last2(1)
     move5.print
     
-    println()
-    println("total: " move1.score + move2.score + move3.score + move4.score + move5.score)
+    val totalScore = move1.score + move2.score + move3.score + move4.score + move5.score
+    println("total: " + totalScore)
   }
    
 }
