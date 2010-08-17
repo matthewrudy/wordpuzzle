@@ -37,15 +37,21 @@ class Grid(val letters:List[String], val wordBucket:WordBucket, val highlighting
   
   val intersectionCells = rowCells.intersect(colCells)
   
-  val bonusWords = intersectionCells.map{ index =>
+  val bonusWords = intersectionCells.toList.map{ index =>
     val positions = Grid.positionsForIndex(index).intersect(wordPositions)
     
-    positions.foldLeft(0) { (bestSoFar, thisPosition) =>
+    var bestScore = 0
+    var bestWord : String = null
+    
+    positions.foreach { thisPosition =>
       val thisWord = validWords(thisPosition)
       val thisScore = Word.score(thisWord)
       
-      scala.math.max(bestSoFar, thisScore)
+      if(thisScore > bestScore)
+        bestWord = thisWord
+        bestScore = thisScore
     }
+    bestWord
   }
 
   val baseScore = validWords.foldLeft(0) { (sum, p) =>
@@ -55,7 +61,7 @@ class Grid(val letters:List[String], val wordBucket:WordBucket, val highlighting
     sum + Word.score(word)
   }
   
-  val bonusScore = bonusWords.sum
+  val bonusScore = bonusWords.foldLeft(0) { (sum, word) => sum + Word.score(word) }
   
   val score = baseScore + bonusScore
   
@@ -145,9 +151,9 @@ class Grid(val letters:List[String], val wordBucket:WordBucket, val highlighting
     this.letters.grouped(4).foreach { group =>
       println(group.mkString(", "))                       
     }
-    println("score: " + baseScore)
-    println("words: " + words)
-    println("bonus: " + bonusScore)
+    println("score: " + baseScore + " + " + bonusScore + " = " + score)
+    println("words: " + words.map{ word => word+"("+Word.score(word)+")" }.mkString(", "))
+    println("bonus: " + bonusWords.map{ word => word+"("+Word.score(word)+")" }.mkString(", "))
     println("")
   }
 }
