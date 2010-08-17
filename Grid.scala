@@ -58,7 +58,7 @@ class Grid(val letters:List[String], val wordBucket:WordBucket, val highlighting
   
   def best2Moves() = {
     var bestScore = Int.MinValue
-    var bestMoves : List[Grid] = null
+    var bestest : List[Grid] = null
     
     for(i1 <- 0 until 15; j1 <- i1+1 to 15) {
       val move1 = nextMove(i1, j1)
@@ -72,14 +72,45 @@ class Grid(val letters:List[String], val wordBucket:WordBucket, val highlighting
               
           if (thisScore > bestScore) {
             bestScore = thisScore
-            bestMoves = List(move1, move2)
+            bestest = List(move1, move2)
           
             // println("new two move best score " + bestScore)
           }
         }
       }  
     }
-    bestMoves
+    bestest
+  }
+  
+  def best3Moves() = {
+    var bestScore = Int.MinValue
+    var bestest : List[Grid] = null
+    
+    for(i <- 0 until 15; j <- i+1 to 15) {
+      val move1 = nextMove(i, j)
+      
+      if(move1.score > 0) { // cut out maybe 30% of cases which are 0 score
+      
+        for(i <- 0 until 15; j <- i+1 to 15) {
+          val move2 = move1.nextMove(i, j)
+        
+          if(move2.score > 0) { // cut out maybe 30% of cases here as well
+            
+            for(i <- 0 until 15; j <- i+1 to 15) {
+              val move3 = move2.nextMove(i, j)
+              
+              val thisScore = move1.score + move2.score + move3.score
+              
+              if (thisScore > bestScore) {
+                bestScore = thisScore
+                bestest = List(move1, move2, move3)
+              }
+            }
+          }
+        }
+      }  
+    }
+    bestest
   }
   
   def print() {
