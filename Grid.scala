@@ -61,6 +61,12 @@ class Grid(val letters:List[String], val wordBucket:WordBucket, val highlighting
       println("score : " + next.score)
     }
   }
+  
+  def print() {
+    this.letters.grouped(4).foreach { group =>
+      println(group.mkString(", "))                       
+    }
+  }
 }
 
 object Grid {
