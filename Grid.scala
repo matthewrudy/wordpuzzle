@@ -114,6 +114,36 @@ class Grid(val letters:List[String], val wordBucket:WordBucket, val highlighting
     bestest
   }
   
+  def bestNMoves(n:Int) : (Int,List[Grid]) = {
+    
+    if (n==0) {
+      (this.score, List(this))
+    }
+    else {
+      
+      var bestScore = Int.MinValue
+      var bestMoves : List[Grid] = null
+      
+      for (i <- 0 until 15; j <- i+1 to 15) {
+        
+        val nextOne = nextMove(i,j)
+        
+        if (nextOne.score > Grid.MINIMUM_MOVE) { // cut out maybe 30% of cases
+          
+          val nextMoves = nextOne.bestNMoves(n-1)
+          
+          val thisScore = this.score + nextMoves._1
+          
+          if (thisScore > bestScore) {
+            bestScore = thisScore
+            bestMoves = this +: nextMoves._2
+          }
+        }
+      }
+      (bestScore, bestMoves)
+    }
+  }
+  
   def best3Moves() = {
     var bestScore = Int.MinValue
     var bestest : List[Grid] = null
