@@ -76,18 +76,7 @@ class Grid(val letters:List[String], val wordBucket:WordBucket, val highlighting
   }
   
   def bestMove() = {
-    var bestScore = Int.MinValue
-    var bestest : Grid = null
-    
-    for(i <- 0 until 15; j <- i+1 to 15) {
-      
-      val next = nextMove(i, j)
-      
-      if (next.score > bestScore)
-        bestest = next
-        bestScore = next.score
-    }
-    bestest
+    bestNMoves(1)._2
   }
   
   def best2Moves() = {
