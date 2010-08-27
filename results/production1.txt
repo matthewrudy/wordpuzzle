@@ -1,0 +1,73 @@
+time scala Solver E T W D I N L A M A L Y E Y E I
+
+initial:
+
+ E  T  W  D 
+ I  N  L  A 
+ M  A  L  Y 
+ E  Y  E  I 
+
+words: 
+bonus: 
+score: 0 + 0 = 0
+
+move 1:
+
+(T)(E) W  D 
+ I  N  L  A 
+ M  A  L  Y 
+ E  Y  E  I 
+
+words: TEW(18), TIME(24), NAY(18)
+bonus: TIME(24)
+score: 60 + 24 = 84
+
+move 2:
+
+ T  E  W  D 
+ I  N (Y) A 
+ M  A  L  Y 
+ E (L) E  I 
+
+words: WYLE(40), MAL(15), LEI(9)
+bonus: WYLE(40), WYLE(40)
+score: 64 + 80 = 144
+
+move 3:
+
+(L) E  W  D 
+ I  N  Y  A 
+ M  A (T) Y 
+ E  L  E  I 
+
+words: MAT(15), LEW(18), DAY(21), MATY(36), LIME(24), WYTE(40), LEWD(32)
+bonus: LIME(24), MATY(36), WYTE(40), LEWD(32), MATY(36), MATY(36)
+score: 186 + 204 = 390
+
+move 4:
+
+ L  E  W  D 
+(A) N  Y  A 
+ M (I) T  Y 
+ E  L  E  I 
+
+words: LAM(15), NIL(9), ANY(18), LAME(24), MITY(36)
+bonus: ANY(18), MITY(36), MITY(36), LAME(24)
+score: 102 + 114 = 216
+
+move 5:
+
+(W) E (L) D 
+ A  N  Y  A 
+ M  I  T  Y 
+ E  L  E  I 
+
+words: WELD(32), LYTE(28), WAME(36), ELD(12)
+bonus: WAME(36), WELD(32)
+score: 108 + 68 = 176
+
+total: 1010
+
+real	0m50.519s
+user	0m54.048s
+sys	0m1.035s
