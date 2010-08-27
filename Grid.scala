@@ -1,3 +1,6 @@
+import scala.actors._
+import scala.actors.Actor._
+
 class Grid(val letters:List[String], val wordBucket:WordBucket, val highlighting:HighlightingGridBase, val swapped:Set[Int]) {
   
   val possiblePositions = Grid.POSITIONS.filter { p => 
@@ -80,11 +83,11 @@ class Grid(val letters:List[String], val wordBucket:WordBucket, val highlighting
   }
   
   def best2Moves() = {
-    bestNMoves(2)._2
+    bestNMovesActed(2)._2
   }
   
   def best3Moves() = {
-    bestNMoves(3)._2
+    bestNMovesActed(3)._2
   }
   
   def bestNMoves(n:Int) : (Int,List[Grid]) = {
@@ -111,6 +114,52 @@ class Grid(val letters:List[String], val wordBucket:WordBucket, val highlighting
             bestScore = thisScore
             bestMoves = nextOne +: nextMoves._2
           }
+        }
+      }
+      (bestScore, bestMoves)
+    }
+  }
+  
+  def bestNMovesActed(n:Int) : (Int,List[Grid]) = {
+    
+    if (n==0) {
+      (0, List[Grid]())
+    }
+    else {
+      
+      val caller = self
+      
+      for (i <- 0 until 15; j <- i+1 to 15) {
+        
+        actor {
+          val nextOne = nextMove(i,j)
+        
+          if (nextOne.score > Grid.MINIMUM_MOVE) { // cut out maybe 30% of cases
+          
+            val nextMoves = nextOne.bestNMoves(n-1)
+          
+            val thisScore  = nextOne.score + nextMoves._1
+            val theseMoves = nextOne +: nextMoves._2
+          
+            caller ! (thisScore, theseMoves)
+          }
+          else {
+            caller ! "skip"
+          }
+        }
+      }
+      
+      var bestScore = Int.MinValue
+      var bestMoves : List[Grid] = null
+   
+      for(i <- 1 to 120) {
+        receive {
+          case "skip" => null
+          case (thisScore : Int, theseMoves : List[Grid]) =>
+            if (thisScore > bestScore) {
+              bestScore = thisScore
+              bestMoves = theseMoves
+            }
         }
       }
       (bestScore, bestMoves)
