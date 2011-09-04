@@ -1,3 +1,5 @@
+package com.matthewrudy.scala.wordpuzzle
+
 object Word {
   
   def scrabbleScore(word:String) = {
@@ -46,8 +48,8 @@ object Word {
   // actual score = 3 * 10 = 30
   def score(word:String) = scrabbleScore(word) * word.length
   
-  val WORDS = io.Source.fromFile("dict/3letters").getLines.toSet ++
-              io.Source.fromFile("dict/4letters").getLines.toSet
+  val WORDS = io.Source.fromFile("res/dict/3letters").getLines.toSet ++
+              io.Source.fromFile("res/dict/4letters").getLines.toSet
   
   def isWord(word:String) = WORDS contains word
 

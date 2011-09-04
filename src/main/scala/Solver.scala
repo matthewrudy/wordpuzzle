@@ -1,3 +1,5 @@
+package com.matthewrudy.scala.wordpuzzle
+
 object Solver {
 
   // scala Solver E T W D I N L A M A L Y E Y E I
