@@ -12,8 +12,13 @@ object Solver {
     )
   
   */
-  def main(letters:Array[String]) {
-    
+  def main(args:Array[String]) {
+    val letters = readLine("Enter a grid:\n\n")
+    //val letters = "E T W D I N L A M A L Y E Y E I"
+    runGame(letters.split(" "))
+  }
+  
+  def runGame(letters:Array[String]) {
     println()
     
     println("initial:")
@@ -47,5 +52,4 @@ object Solver {
     val totalScore = move1.score + move2.score + move3.score + move4.score + move5.score
     println("total: " + totalScore)
   }
-   
 }
